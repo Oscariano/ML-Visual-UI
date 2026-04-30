@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ML Visual UI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="components-panel" aria-label="Components">
+        <div class="components-title">ML Visual UI</div>
+
+        <section class="component-group">
+          <button class="group-header">
+            <span class="group-icon">⛓</span>
+            <span>Data</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button class="component-item teal" draggable="true" data-component="DatasetLoader" data-kind="data">DatasetLoader <span>≡</span></button>
+          <button class="component-item teal" draggable="true" data-component="FeatureTable" data-kind="data">FeatureTable <span>≡</span></button>
+        </section>
+
+        <section class="component-group">
+          <button class="group-header">
+            <span class="group-icon">✦</span>
+            <span>Prepare</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button class="component-item blue" draggable="true" data-component="SchemaCheck" data-kind="prep">SchemaCheck <span>≡</span></button>
+          <button class="component-item blue" draggable="true" data-component="TrainTestSplit" data-kind="prep">TrainTestSplit <span>≡</span></button>
+          <button class="component-item blue" draggable="true" data-component="CategoricalEncoder" data-kind="prep">CategoricalEncoder <span>≡</span></button>
+        </section>
+
+        <section class="component-group">
+          <button class="group-header">
+            <span class="group-icon">◌</span>
+            <span>Models</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button class="component-item purple" draggable="true" data-component="LogisticRegression" data-kind="model">LogisticRegression <span>≡</span></button>
+          <button class="component-item purple" draggable="true" data-component="XGBoostClassifier" data-kind="model">XGBoostClassifier <span>≡</span></button>
+          <button class="component-item purple" draggable="true" data-component="TransformerModel" data-kind="model">TransformerModel <span>≡</span></button>
+        </section>
+
+        <section class="component-group">
+          <button class="group-header">
+            <span class="group-icon">⌁</span>
+            <span>Evaluation</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button class="component-item amber" draggable="true" data-component="MetricReport" data-kind="eval">MetricReport <span>≡</span></button>
+          <button class="component-item amber" draggable="true" data-component="CompareRuns" data-kind="eval">CompareRuns <span>≡</span></button>
+        </section>
+
+        <section class="component-group">
+          <button class="group-header">
+            <span class="group-icon">⚒</span>
+            <span>Deploy</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button class="component-item red" draggable="true" data-component="FastAPIEndpoint" data-kind="deploy">FastAPIEndpoint <span>≡</span></button>
+          <button class="component-item red" draggable="true" data-component="BatchInference" data-kind="deploy">BatchInference <span>≡</span></button>
+        </section>
+
+        <div class="created-by">Created by Codex</div>
+      </aside>
+
+      <main class="flow-area">
+        <header class="flow-topbar">
+          <div class="flow-tabs">
+            <button class="flow-tab active">New Flow</button>
+            <button class="add-flow" aria-label="Add flow">+</button>
+          </div>
+          <div class="top-icons" aria-label="Utilities">
+            <button>☾</button>
+            <button>♢</button>
+          </div>
+        </header>
+
+        <div class="flow-content">
+        <section class="canvas" aria-label="ML pipeline canvas">
+          <svg class="wires" aria-hidden="true">
+            <path class="wire blue" data-from="data" data-to="prep" />
+            <path class="wire purple" data-from="prep" data-to="model" />
+            <path class="wire amber" data-from="prep" data-to="agent" />
+            <path class="wire red" data-from="model" data-to="agent" />
+            <path class="wire red" data-from="search" data-to="agent" />
+          </svg>
+
+          <article class="flow-node selected wide" style="left: 178px; top: 74px" data-node="data">
+            <div class="node-title">
+              <span class="node-icon blue">▣</span>
+              <strong>DatasetLoader</strong>
+              <button>⌫</button>
+            </div>
+            <p class="node-desc">Load a customer CSV and infer the tabular schema.</p>
+            <label>Source</label>
+            <div class="node-input">s3://datasets/customers.csv <span>↗</span></div>
+            <label>Target column</label>
+            <div class="node-input">churned <span>↗</span></div>
+            <div class="io-title">Output:</div>
+            <footer><span>DatasetLoader</span><i class="port out blue"></i></footer>
+          </article>
+
+          <article class="flow-node" style="left: 552px; top: 122px" data-node="prep">
+            <div class="node-title">
+              <span class="node-icon teal">⛓</span>
+              <strong>PrepareData</strong>
+              <button>⌫</button>
+            </div>
+            <p class="node-desc">Validate schema, encode categories, and split train/test.</p>
+            <div class="io-title">Inputs:</div>
+            <div class="port-row"><i class="port in"></i> Dataset <b>*</b></div>
+            <div class="port-row"><i class="port in blue"></i> Rules</div>
+            <div class="io-title">Output:</div>
+            <footer><span>PreparedData</span><i class="port out amber"></i></footer>
+          </article>
+
+          <article class="flow-node" style="left: 552px; top: 323px" data-node="model">
+            <div class="node-title">
+              <span class="node-icon purple">◌</span>
+              <strong>LogisticRegression</strong>
+              <button>⌫</button>
+            </div>
+            <p class="node-desc">Baseline classifier optimized for fast iteration.</p>
+            <label>Metric</label>
+            <div class="node-input">F1 score</div>
+            <div class="io-title">Inputs:</div>
+            <div class="port-row"><i class="port in purple"></i> PreparedData <b>*</b></div>
+            <div class="io-title">Output:</div>
+            <footer><span>ModelArtifact</span><i class="port out red"></i></footer>
+          </article>
+
+          <article class="flow-node" style="left: 552px; top: 552px" data-node="search">
+            <div class="node-title">
+              <span class="node-icon red">⌁</span>
+              <strong>ChangeImpact</strong>
+              <button>⌫</button>
+            </div>
+            <p class="node-desc">Preview what changes if this pipeline uses XGBoost.</p>
+            <label>Requested change</label>
+            <div class="node-input">Switch model to XGBoost</div>
+            <div class="io-title">Output:</div>
+            <footer><span>ImpactPlan</span><i class="port out red"></i></footer>
+          </article>
+
+          <article class="flow-node agent" style="left: 846px; top: 250px" data-node="agent">
+            <div class="node-title">
+              <span class="node-icon purple">✦</span>
+              <strong>PipelineAssistant</strong>
+              <button>⌫</button>
+            </div>
+            <p class="node-desc">Guides software engineers through ML decisions.</p>
+            <div class="io-title">Inputs:</div>
+            <div class="port-row"><i class="port in amber"></i> Prepared data <b>*</b></div>
+            <div class="port-row"><i class="port in red"></i> Model artifact</div>
+            <div class="port-row"><i class="port in red"></i> Change plan</div>
+            <div class="io-title">Output:</div>
+            <footer><span>GuidedPipeline</span><i class="port out purple"></i></footer>
+          </article>
+
+          <div class="zoom-controls" aria-label="Canvas controls">
+            <button>+</button>
+            <button>−</button>
+            <button>□</button>
+            <button>⌂</button>
+            <button>⇧</button>
+            <button>⇩</button>
+          </div>
+        </section>
+
+          <aside class="ide-panel" aria-label="Pipeline IDE">
+            <div class="editor-strip">
+              <button class="file-tab active">pipeline.yml</button>
+              <button class="file-tab">selected-node.yml</button>
+              <button class="file-tab">runs.json</button>
+            </div>
+            <div class="editor-breadcrumb">
+              <span>ml-visual-ui</span>
+              <span>›</span>
+              <span>flows</span>
+              <span>›</span>
+              <strong>pipeline.yml</strong>
+              <em id="ideStatus">Ready</em>
+            </div>
+            <section class="code-workbench" id="codePanel">
+              <div class="line-numbers" id="lineNumbers" aria-hidden="true">1<br />2<br />3<br />4<br />5</div>
+              <textarea id="codeEditor" spellcheck="false">pipeline:
+  data:
+    source: s3://datasets/customers.csv
+    target: churned
+    validation_split: 0.2</textarea>
+            </section>
+            <footer class="editor-statusbar">
+              <span id="codeFeedback">Edit `pipeline.yml`; applying updates the visual graph.</span>
+              <button id="applyCodeBtn">Apply code</button>
+            </footer>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
